@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>主页</title>
+</head>
+<body>
+<p th:text="'欢迎！'+${username}+'!'">
+    <br>
+<div>
+    <input type="button" value="查看成绩">
+    <form action="/admin/search_user" method="post"><input type="submit" value="修改考生信息"></form>>
+    <form action="logout" method="post"><input type="submit" value="退出登陆"></form>>
+</div>
+
+</body>
+</html>
