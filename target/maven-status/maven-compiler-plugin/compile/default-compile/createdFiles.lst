@@ -3,12 +3,16 @@ qe\entity\CQuestion.class
 qe\service\UserService.class
 qe\mapper\UserMapper.class
 qe\controller\AdminContorller.class
+qe\service\ExamService.class
 qe\controller\ExamController.class
+qe\mapper\QuestionMapper.class
 qe\service\UserServiceImp.class
 qe\controller\LoginController.class
 qe\Application.class
 qe\entity\Question.class
 qe\entity\TFQuestion.class
+qe\handler\ListTypeHandler.class
 qe\entity\User.class
 qe\filter\AdminAuthFilter.class
 qe\entity\Admin.class
+qe\service\ExamServiceImp.class

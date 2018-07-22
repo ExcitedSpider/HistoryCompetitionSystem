@@ -6,8 +6,18 @@ import java.io.Serializable;
 
 //判断题
 public class TFQuestion implements Question, Serializable{
+    private int id;
     private String question;
     private int answer;
+
+    @JsonIgnore
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @JsonIgnore
     @Override
@@ -21,6 +31,12 @@ public class TFQuestion implements Question, Serializable{
     }
 
     public TFQuestion(String question, int answer) {
+        this.question = question;
+        this.answer = answer;
+    }
+
+    public TFQuestion(int id, String question, int answer) {
+        this.id = id;
         this.question = question;
         this.answer = answer;
     }
