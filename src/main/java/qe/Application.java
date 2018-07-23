@@ -1,5 +1,6 @@
 package qe;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +28,12 @@ public class Application {
         FilterRegistrationBean registration = new FilterRegistrationBean(new AdminAuthFilter());
         registration.addUrlPatterns("/admin/*");
         return registration;
+    }
+
+    @Bean
+    public ObjectMapper ObjectMapper(){
+        ObjectMapper objectMapper=new ObjectMapper();
+        return objectMapper;
     }
 
 }

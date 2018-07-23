@@ -16,7 +16,7 @@ public interface QuestionMapper {
     CQuestion getOneCQ(int id);
 
     @Insert("INSERT INTO CQUESTION (question, choices, answer) VALUES (#{question},#{choices, typeHandler=qe.handler.ListTypeHandler},#{answer})")
-    @Options(useGeneratedKeys = true)
+    @Options(useGeneratedKeys = true,keyProperty = "id")
     int insertCQ(CQuestion question);
 
     @Select("SELECT * FROM tfquestion WHERE id = #{id}")
@@ -24,7 +24,7 @@ public interface QuestionMapper {
     TFQuestion getOneTFQ(int id);
 
     @Insert("INSERT INTO tfquestion (question, answer) VALUES(#{question},#{answer})")
-    @Options(useGeneratedKeys = true)
+    @Options(useGeneratedKeys = true,keyProperty = "id")
     int insertTFQ(TFQuestion question);
 
     @Select("SELECT count(1) FROM CQUESTION")

@@ -27,7 +27,7 @@ public class ExamController {
 
     @GetMapping("/get_paper")
     @ResponseBody
-    public ExamPaper getExamPaper(){
+    public ExamPaper getExamPaper() throws Exception{
         return service.getRandomPaper();
     }
 }

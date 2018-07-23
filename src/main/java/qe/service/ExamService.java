@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ExamService {
 
-    ExamPaper getRandomPaper();
+    ExamPaper getRandomPaper() throws Exception;
 
     int getFinalScore();
 }

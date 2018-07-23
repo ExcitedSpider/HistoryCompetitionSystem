@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: qe.ApplicationTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 4.905 s <<< FAILURE! - in qe.ApplicationTest
-contextLoads(qe.ApplicationTest)  Time elapsed: 0.453 s  <<< ERROR!
-java.lang.NullPointerException
-	at qe.ApplicationTest.contextLoads(ApplicationTest.java:38)
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.071 s - in qe.ApplicationTest
