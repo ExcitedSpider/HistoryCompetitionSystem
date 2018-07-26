@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import qe.filter.AdminAuthFilter;
+import qe.filter.ExamineeFilter;
 
 import javax.servlet.FilterRegistration;
 
@@ -17,6 +19,7 @@ import javax.servlet.FilterRegistration;
 @SpringBootApplication
 @EnableCaching
 @MapperScan("qe.mapper")
+@ServletComponentScan
 public class Application {
 
     public static void main(String[] args) {

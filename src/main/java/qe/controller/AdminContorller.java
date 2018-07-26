@@ -55,4 +55,5 @@ public class AdminContorller {
         model.addAttribute("user",user);
         return "users_manage";
     }
+
 }

@@ -17,3 +17,4 @@ qe\service\UserServiceImp.class
 qe\entity\PaperAnswer.class
 qe\filter\AdminAuthFilter.class
 qe\service\ExamServiceImp.class
+qe\filter\ExamineeFilter.class
