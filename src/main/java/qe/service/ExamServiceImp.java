@@ -60,7 +60,7 @@ public class ExamServiceImp implements ExamService {
 
 
         int code;
-        int paperID = paperIDCounter.addAndGet(1);
+        long paperID = redis.opsForValue().increment("paper_id",1);
         if(questions.size() == (REQURED_C+REQURED_TF))
         {
             code = 1;

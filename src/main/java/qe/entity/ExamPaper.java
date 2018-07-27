@@ -7,7 +7,7 @@ public class ExamPaper {
     /** 1 - 成功
      *  0 - 失败
      **/
-    private int paperID;
+    private long paperID;
 
     private List<Question> questions;
 
@@ -22,13 +22,13 @@ public class ExamPaper {
         this.questions = questions;
     }
 
-    public ExamPaper(int code, List<Question> questions, int papaerID) {
+    public ExamPaper(int code, List<Question> questions, long papaerID) {
         this.code = code;
         this.questions = questions;
         this.paperID = papaerID;
     }
 
-    public int getPaperID() {
+    public long getPaperID() {
         return paperID;
     }
 

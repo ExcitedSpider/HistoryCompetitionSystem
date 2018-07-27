@@ -28,6 +28,7 @@ public class AdminAuthFilter implements Filter {
         String type = (String) session.getAttribute("type");
         if(type!=null){
             if(type.equals("admin")){
+                filterChain.doFilter(servletRequest,servletResponse);
                 return;
             }
         }

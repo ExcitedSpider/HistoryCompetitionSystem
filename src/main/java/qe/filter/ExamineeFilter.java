@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "ExamineeFilter",urlPatterns = "/exam/*")
+@WebFilter(filterName = "ExamineeFilter", urlPatterns = "/exam/*")
 public class ExamineeFilter implements Filter{
 
     private static Log log = LogFactory.getLog(ExamineeFilter.class);
@@ -28,13 +28,14 @@ public class ExamineeFilter implements Filter{
         String type = (String)session.getAttribute("type");
         if(type!=null){
             if(type.equals("common")){
+                filterChain.doFilter(servletRequest,servletResponse);
                 return;
             }
         }
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         response.sendRedirect("/index.html");
         response.getWriter().print("<script language=\"javascript\">alert('请先登陆');window.location.href='/index.html'</script>");
-        log.info("ip: "+request.getRemoteAddr()+" tend to use admin page without login");
+        log.info("ip: "+request.getRemoteAddr()+" tend to use exam page without login");
     }
 
     @Override

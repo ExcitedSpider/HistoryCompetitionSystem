@@ -6,9 +6,9 @@ import java.util.List;
 
 public class PaperAnswer implements Serializable {
     private List<Integer> answers;
-    private int paperID;
+    private long paperID;
 
-    public PaperAnswer(List<Integer> answers, int paperID) {
+    public PaperAnswer(List<Integer> answers, long paperID) {
         this.answers = answers;
         this.paperID = paperID;
     }
@@ -21,7 +21,7 @@ public class PaperAnswer implements Serializable {
         this.answers = answers;
     }
 
-    public int getPaperID() {
+    public long getPaperID() {
         return paperID;
     }
 
