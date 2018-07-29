@@ -59,4 +59,10 @@ public class UserServiceImp implements UserService {
     public User getOne(String username) {
         return userMapper.getOne(username);
     }
+
+    @Override
+    public boolean saveGrade(String username, int grade) {
+        int result = userMapper.updateGrade(username,grade);
+        return result!=0;
+    }
 }

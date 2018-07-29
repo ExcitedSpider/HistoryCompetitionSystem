@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import qe.entity.CQuestion;
-import qe.entity.ExamPaper;
-import qe.entity.Question;
-import qe.entity.TFQuestion;
+import qe.entity.*;
+import qe.mapper.UserMapper;
 import qe.service.ExamService;
+import qe.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -21,11 +20,13 @@ import java.util.List;
 public class ExamController {
 
     private final ExamService service;
+    private final UserService userService;
     private static Log log = LogFactory.getLog(ExamController.class);
 
     @Autowired
-    public ExamController(ExamService service) {
+    public ExamController(ExamService service,UserService userService) {
         this.service = service;
+        this.userService = userService;
     }
 
     @GetMapping("/get_paper")
@@ -48,12 +49,14 @@ public class ExamController {
         return "grade_page";
     }
 
-    //todo: 对答案的程序
     /**
      * 这个是考试完成的同学把成绩发过来对答案用的
      */
     @PostMapping("/getgrade")
-    public String getGrade(){
+    public String getGrade(@RequestBody PaperAnswer answer,HttpSession session){
+        int grade = service.getFinalScore(answer);
+        String username = (String)session.getAttribute("username");
+        userService.saveGrade(username,grade);
         return "redirect:check_grade";
     }
 

@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaperAnswer implements Serializable {
-    private List<Integer> answers;
+
     private long paperID;
+    /**
+     * 先20选择后10判断，选择4分一题判断2分一题
+     */
+    private List<Integer> answers;
+
 
     public PaperAnswer(List<Integer> answers, long paperID) {
         this.answers = answers;

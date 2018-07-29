@@ -20,4 +20,7 @@ public interface UserMapper {
 
     @Update("UPDATE users SET password = #{newPassword} WHERE id = #{username}")
     int changeUserPassword(String username,String newPassword);
+
+    @Update("UPDATE users SET grade = #{grade} WHERE id = #{username}")
+    int updateGrade(String username,int grade);
 }

@@ -13,4 +13,6 @@ public interface UserService {
     boolean changeUserPassword(String username,String newPassword);
 
     User getOne(String username);
+
+    boolean saveGrade(String username,int grade);
 }
