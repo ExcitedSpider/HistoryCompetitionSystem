@@ -1,20 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>校史竞赛系统-登陆</title>
+    <link rel="icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <script src="js/jquery-3.3.1.min.js">
+    </script>
+    <script type="text/javascript">
+        // 删除cookie，cookie名为username
+        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT"; 
+    </script>
+    <style type="text/css">
+        body {
+            background-image: url(pic/bg_01.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center center;
+            position: absolute;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            cursor: url("cur/curNormal.ico"), auto;
+        }
+
+        form {
+            margin: 0;
+            padding: 50px;
+            box-shadow: 5px 5px 15px;
+            position: absolute;
+            left: 33%;
+            top: 25%;
+            font-size: 1.2em;
+            border-style: hidden;
+            box-shadow: 5px 5px 15px;
+            color: #6a8372;
+            /*#66bab7[水浅葱]#6a8372[老竹]*/
+            border-radius: 15px;
+            background-color: rgba(255, 253, 255, 0.5)/*#ffffff70*/
+            ;
+            background-clip: border-box;
+            width: 330;
+            height: 240;
+        }
+
+        input {
+            width: 300px;
+            height: 60px;
+            background-color: rgba(255, 253, 255, 0.5);
+            /*#ffffff70*/
+            border-bottom-style: dashed;
+            border-color: white;
+            border-radius: 15px;
+            margin: 10px;
+            font-size: 1.5em;
+            color: #000000aa;
+            padding: 3px;
+            cursor: pointer;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+
+        #title {
+            text-align: center;
+            color: #6a8372;
+            font-size: 2em;
+        }
+
+        a {
+            cursor: pointer;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+
+        a:hover {
+            color: black;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- 登录表单 -->
     <form action="login" method="post">
-        学号:<br>
-        <input type="text" name="username">
+        <p id="title">校史竞赛系统▼</p>
         <br>
-        密码:<br>
-        <input type="password" name="password">
+        <a href="user_login.html">
+            <input type="button" id="return" value="登录">
+        </a>
         <br>
-        <input type="submit" value="登陆">
+        <a href="admin_login.html">管理员登录</a>
     </form>
-    <br>
-    <a href="admin_login.html">管理员登陆</a>
 </body>
+
 </html>

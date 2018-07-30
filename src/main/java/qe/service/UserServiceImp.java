@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import qe.entity.Admin;
 import qe.entity.User;
 import qe.mapper.UserMapper;
@@ -22,7 +23,8 @@ public class UserServiceImp implements UserService {
     public boolean checkForLogin(User user) {
         User tendUser = userMapper.getOne(user.getUsername());
         if (tendUser!=null){
-            if(tendUser.getPassword().equals(user.getPassword())){
+            String md5Password = DigestUtils.md5DigestAsHex(tendUser.getPassword().getBytes());
+            if(md5Password.equals(user.getPassword())){
                 log.info("user "+user.getUsername()+" password correct");
                 return true;
             }
@@ -34,7 +36,8 @@ public class UserServiceImp implements UserService {
     public boolean checkForAdminLogin(User user) {
         Admin tendUser = userMapper.getAdmin(user.getUsername());
         if (tendUser!=null){
-            if(tendUser.getPassword().equals(user.getPassword())){
+            String md5Password = DigestUtils.md5DigestAsHex(tendUser.getPassword().getBytes());
+            if(md5Password.equals(user.getPassword())){
                 log.info("admin "+user.getUsername()+" password correct");
                 return true;
             }

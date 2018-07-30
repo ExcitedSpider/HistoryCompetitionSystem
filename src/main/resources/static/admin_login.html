@@ -1,19 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>管理员登陆</title>
+    <title>校史竞赛系统-登陆</title>
+    <link rel="icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.md5.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#login").hide();
+            $("#login").click(function () {
+                var userName = $.md5($("#original_password").val());
+                console.log(userName);
+                $("#password").val(userName);
+            });
+            $("input").bind("input propertychange",function(){
+                if($("#username").val()=="" || $("#original_password").val()==""){
+                    $("#login").slideUp();
+                }
+                else{
+                    $("#login").slideDown();
+                }
+            });
+        });
+    </script>
+    <style type="text/css">
+        body {
+            background-image: url(pic/bg_01.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center center;
+            position: absolute;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            cursor: url("cur/curNormal.ico"), auto;
+        }
+
+        form {
+            margin: 0;
+            padding: 50px;
+            box-shadow: 5px 5px 15px;
+            position: absolute;
+            left: 30%;
+            top: 25%;
+            font-size: 1.2em;
+            border-style: hidden;
+            box-shadow: 5px 5px 15px;
+            color: #6a8372;
+            /*#66bab7[水浅葱]#6a8372[老竹]*/
+            border-radius: 15px;
+            background-color: rgba(255, 253, 255, 0.5)/*#ffffff70*/
+            ;
+            background-clip: border-box;
+            width: 330;
+            height: 240;
+        }
+
+        #password {
+            display: none;
+        }
+
+        input {
+            width: 300px;
+            background-color: rgba(255, 253, 255, 0.5)/*#ffffff70*/
+            ;
+            border-bottom-style: dashed;
+            border-color: white;
+            border-radius: 15px;
+            margin: 10px;
+            font-size: 1em;
+            color: #000000aa;
+            padding: 3px;
+            cursor: url("cur/curSelect.ico"), auto;
+
+        }
+
+        #login {
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+    </style>
 </head>
+
 <body>
-<form action="admin_login" method="post">
-    账号:<br>
-    <input type="text" name="username">
-    <br>
-    密码:<br>
-    <input type="password" name="password">
-    <br>
-    <input type="submit" value="登陆">
-</form>
-    <a href="index.html">返回</a>
+    <form action="login" method="post">
+        管理员账号:
+        <br>
+        <input id="username" type="text" name="username">
+        <br> 密码:
+        <br>
+        <input id="original_password" type="password" name="original_password">
+        <br>
+        <input id="password" type="password" name="password">
+        <!-- <input id="password" name="password"> -->
+        <br>
+        <input id="login" type="submit" value="登陆">
+        <!-- <input id="login" type="button" value="登陆"> -->
+        <!-- <a href="index.html"><input type="button" id="return" value="返回"></a> -->
 </body>
+
 </html>
