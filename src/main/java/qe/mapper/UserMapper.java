@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.*;
 import qe.entity.Admin;
 import qe.entity.User;
 
+import java.util.List;
+
 public interface UserMapper {
 
     @Select("SELECT * FROM users WHERE id = #{id}")
@@ -23,4 +25,13 @@ public interface UserMapper {
 
     @Update("UPDATE users SET grade = #{grade} WHERE id = #{username}")
     int updateGrade(String username,int grade);
+
+    @Select("SELECT grade FROM users WHERE id = #{username}")
+    int getGradeByUsername(String username);
+
+    @Select("SELECT * FROM users")
+    @Results({
+            @Result(property = "username", column = "id")
+    })
+    List<User> getAllUserInfo();
 }

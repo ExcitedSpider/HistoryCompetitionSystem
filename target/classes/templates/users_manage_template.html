@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户管理</title>
+</head>
+<body>
+
+<div>
+    <form action="search_user" method="post">
+        查找用户名：
+        <input type="text" name="username">
+        <input type="submit" value="查询">
+    </form>
+</div>
+<div>
+    <table>
+        <tr>
+            <td>一卡通号</td><td>密码</td><td>成绩</td><td>操作</td>>
+        </tr>
+        <tr>
+            <form action="/admin/change_username" method="post" id="form1">
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td th:text="${user.grade}"></td>
+            <td><button onclick="disp_prompt()" th:if="${user.grade}">修改一卡通号</button></td>
+                <input type="text" style="display: none" th:value="${user.username}" name="old_username">
+                <input type="text" style="display: none" id="new_username" name="new_username">
+            </form>
+        </tr>
+    </table>
+</div>
+<script language='javascript'>
+    function disp_prompt()
+    {
+        var new_username=prompt("请输入新一卡通号","");
+        if(new_username!=null) {
+            var input = document.getElementById("new_username");
+            input.value = new_username;
+            document.form1.submit();
+        }
+    }
+</script>
+</body>
+</html>

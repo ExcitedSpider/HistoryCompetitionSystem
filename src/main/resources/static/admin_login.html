@@ -9,18 +9,23 @@
     <script src="js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/jquery.md5.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function ()
+        {
             $("#login").hide();
-            $("#login").click(function () {
+            $("#login").click(function ()
+            {
                 var userName = $.md5($("#original_password").val());
                 console.log(userName);
                 $("#password").val(userName);
             });
-            $("input").bind("input propertychange",function(){
-                if($("#username").val()=="" || $("#original_password").val()==""){
+            $("input").bind("input propertychange", function ()
+            {
+                if ($("#username").val() == "" || $("#original_password").val() == "")
+                {
                     $("#login").slideUp();
                 }
-                else{
+                else
+                {
                     $("#login").slideDown();
                 }
             });
@@ -49,11 +54,10 @@
             top: 25%;
             font-size: 1.2em;
             border-style: hidden;
-            box-shadow: 5px 5px 15px;
             color: #6a8372;
             /*#66bab7[水浅葱]#6a8372[老竹]*/
             border-radius: 15px;
-            background-color: rgba(255, 253, 255, 0.5)/*#ffffff70*/
+            background-color: rgba(255, 253, 255, 0.7)/*#ffffff70*/
             ;
             background-clip: border-box;
             width: 330;
@@ -73,7 +77,7 @@
             border-radius: 15px;
             margin: 10px;
             font-size: 1em;
-            color: #000000aa;
+            color: rgba(00,00,00,0.7);
             padding: 3px;
             cursor: url("cur/curSelect.ico"), auto;
 
@@ -86,7 +90,7 @@
 </head>
 
 <body>
-    <form action="login" method="post">
+    <form action="admin_login" method="post">
         管理员账号:
         <br>
         <input id="username" type="text" name="username">
@@ -98,8 +102,6 @@
         <!-- <input id="password" name="password"> -->
         <br>
         <input id="login" type="submit" value="登陆">
-        <!-- <input id="login" type="button" value="登陆"> -->
-        <!-- <a href="index.html"><input type="button" id="return" value="返回"></a> -->
 </body>
 
 </html>

@@ -4,8 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <title>考试成绩</title>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <style type="text/css">
+    *{
+    	padding: 0;
+    	margin:0;
+    }
+    body{
+    	background-image: url(/pic/bg_01.jpg);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center center;
+        width: 100%;
+        height: 100%;
+    }
+    input {
+        width: 80px;
+        height: auto;
+        margin-left:85%;
+        margin-top:30px;
+        background-color: rgba(255,253,255,0.7)/*#ffffff70*/;
+        border-bottom-style: dashed;
+        border-color: white;
+        border-radius: 15px;
+        font-size: 1.5em;
+        color: #000000aa;
+        padding: 3px;
+        cursor: pointer;
+        }
+        .grade{
+        	margin:0;
+        padding: 50px;
+        box-shadow: 5px 5px 15px;
+        position: absolute;
+        left: 33%;
+        top: 20%;
+        font-size: 1.2em;
+        border-style: hidden;
+        box-shadow: 5px 5px 15px;
+        color: #6a8372;
+        /*#66bab7[水浅葱]#6a8372[老竹]*/
+        border-radius: 15px;
+        background-color: rgba(255,253,255,0.7)/*#ffffff70*/;
+        background-clip: border-box;
+        width: 330;
+        height: 240;
+        }
+    	p{
+           color: #6a8372;/*杜若*/
+           font-size: 3em;
+           text-align: center;
+    	}
+    	span{
+    		color: red;
+    		font-size: 3em;
+    	}
+    </style>
 </head>
+<body>
+<form action="\logout" method="post"><input type="submit" id="return" value="退出"></form>
 <!--这里是一个p，会在页面上显示一行字，例如"你的成绩是100分!"-->
-<p th:text="'你的成绩是'+${grade}+'分!'">
-</body>
+<div class="grade">
+<p>你的成绩是：</p>
+<p><span th:text="${grade}"></span>分</p>
+
+</div></body>
 </html>

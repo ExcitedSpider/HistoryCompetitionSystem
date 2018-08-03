@@ -1,46 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
     <title>用户管理</title>
-</head>
-<body>
-
-<div>
-    <form action="search_user" method="post">
-        查找用户名：
-        <input type="text" name="username">
-        <input type="submit" value="查询">
-    </form>
-</div>
-<div>
-    <table>
-        <tr>
-            <td>一卡通号</td><td>密码</td><td>成绩</td><td>操作</td>>
-        </tr>
-        <tr>
-            <form action="/admin/change_username" method="post" id="form1">
-            <td th:text="${user.username}"></td>
-            <td th:text="${user.password}"></td>
-            <td th:text="${user.grade}"></td>
-            <td><button onclick="disp_prompt()" th:if="${user.grade}">修改一卡通号</button></td>
-                <input type="text" style="display: none" th:value="${user.username}" name="old_username">
-                <input type="text" style="display: none" id="new_username" name="new_username">
-            </form>
-        </tr>
-    </table>
-</div>
-<script language='javascript'>
-    function disp_prompt()
-    {
-        var new_username=prompt("请输入新一卡通号","");
-        if(new_username!=null) {
-            var input = document.getElementById("new_username");
-            input.value = new_username;
-            document.form1.submit();
+    <style type="text/css">
+        body {
+            background-image: url(/pic/bg_01.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center center;
+            min-width: 600px;
+            min-height: 400px;
+            font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", Arial, sans-serif;
+            cursor: url("cur/curNormal.ico"), auto;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            margin: 0;
         }
-    }
-</script>
+
+        form {
+            margin: 0;
+            padding: 50px;
+            box-shadow: 5px 5px 15px;
+            position: absolute;
+            left: 100px;
+            top: 50px;
+            font-size: 14pt;
+            border-style: hidden;
+            color: #6a8372;
+            /*#66bab7[水浅葱]#6a8372[老竹]*/
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+            background-clip: border-box;
+            width: 400px;
+            font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", Arial, sans-serif;
+        }
+
+        table {
+            margin: 0;
+            padding: 50px;
+            box-shadow: 5px 5px 15px;
+            position: absolute;
+            left: 100px;
+            top: 200px;
+            font-size: 1em;
+            border-style: hidden;
+            color: #666666;
+            /*#66bab7[水浅葱]#6a8372[老竹]*/
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+            background-clip: border-box;
+            text-align: center;
+            font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", Arial, sans-serif;
+
+        }
+
+        input {
+            width: 120px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-bottom-style: dashed;
+            border-radius: 15px;
+            margin: 0px;
+            font-size: 1em;
+            color: rgba(00,00,00,0.7);
+            padding: 3px;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+
+        button {
+            width: 120px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-bottom-style: dashed;
+            border-radius: 15px;
+            margin: 0px;
+            font-size: 1em;
+            color: rgba(00,00,00,0.7);
+            padding: 3px;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+
+        td {
+            width: 100px;
+            /* border:#6a8372a0; */
+            border: rgba(106, 131, 114, 0.5);
+            border-style: solid;
+            padding: 0;
+            margin: 0;
+            border-radius: 20px;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <form action="search_user" method="post">
+            查找用户名：
+            <input type="text" name="username">
+            <input type="submit" value="查询">
+        </form>
+    </div>
+    <div id="listr">
+        <table>
+            <tr>
+                <td>一卡通号</td>
+                <td>密码</td>
+                <td>成绩</td>
+                <td>操作</td>
+            </tr>
+            <tr>
+                <form action="/admin/change_username" method="post" id="form1">
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.password}"></td>
+                    <td th:text="${user.grade}"></td>
+                    <td>
+                        <button onclick="disp_prompt()" th:if="${user.grade}">修改一卡通号</button>
+                    </td>
+                    <input type="text" style="display: none" th:value="${user.username}" name="old_username">
+                    <input type="text" style="display: none" id="new_username" name="new_username">
+                </form>
+            </tr>
+        </table>
+    </div>
+    <script language='javascript'>
+        function disp_prompt()
+        {
+            var new_username = prompt("请输入新一卡通号", "");
+            if (new_username != null)
+            {
+                var input = document.getElementById("new_username");
+                input.value = new_username;
+                document.form1.submit();
+            }
+        }
+    </script>
 </body>
+
 </html>

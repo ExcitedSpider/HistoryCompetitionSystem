@@ -40,7 +40,10 @@ public class LoginController {
             log.info("user "+username+" login success");
             log.info("session lives: "+session.getMaxInactiveInterval());
 
-            return "main_page";
+            if(userService.hasExamed(username)){
+                return "forward:/exam/check_grade";
+            }else
+                return "redirect:exam.html";
         }else {
             log.info("user "+username+" login failed");
             try {
@@ -77,7 +80,7 @@ public class LoginController {
             log.info("admin "+username+" login success");
             log.info("session lives: "+session.getMaxInactiveInterval());
 
-            return "admin_main_page";
+            return "redirect:admin_main_page.html";
             //
         }else {
             log.info("user "+username+" login failed");

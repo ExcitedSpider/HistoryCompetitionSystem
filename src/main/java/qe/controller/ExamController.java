@@ -32,7 +32,6 @@ public class ExamController {
     @GetMapping("/get_paper")
     @ResponseBody
     public ExamPaper getExamPaper(HttpSession session) throws Exception{
-
         ExamPaper paper = service.getRandomPaper();
         session.setAttribute("paper_id",paper.getPaperID());
         log.info("get one paper, id: "+paper.getPaperID());
@@ -42,9 +41,11 @@ public class ExamController {
     /**
      * 这个是已经有成绩的同学查询成绩用的
      */
-    @GetMapping("/check_grade")
-    public String checkGrade(Model model){
-        Integer grade = 100;
+    @RequestMapping("/check_grade")
+    public String checkGrade(Model model,HttpSession session){
+
+        String username = (String)session.getAttribute("username");
+        int grade = userService.getGrade(username);
         model.addAttribute("grade",grade);
         return "grade_page";
     }
@@ -54,10 +55,13 @@ public class ExamController {
      */
     @PostMapping("/getgrade")
     public String getGrade(@RequestBody PaperAnswer answer,HttpSession session){
+        log.info("process");
         int grade = service.getFinalScore(answer);
         String username = (String)session.getAttribute("username");
+        log.info("user "+username+" grade: "+grade);
         userService.saveGrade(username,grade);
         return "redirect:check_grade";
     }
+
 
 }

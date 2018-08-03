@@ -18,6 +18,8 @@ public class PaperAnswer implements Serializable {
         this.paperID = paperID;
     }
 
+    public PaperAnswer(){}
+
     public List<Integer> getAnswers() {
         return answers;
     }

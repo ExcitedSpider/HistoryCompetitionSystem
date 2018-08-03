@@ -9,7 +9,7 @@ CREATE DATABASE HC;
 CREATE TABLE users (
   id VARCHAR(10) NOT NULL PRIMARY KEY,
   password VARCHAR(20) NOT NULL,
-  grade INT DEFAULT 0
+  grade INT DEFAULT -1
 );
 
 
@@ -18,6 +18,6 @@ CREATE TABLE admin (
   password VARCHAR(20) NOT NULL
 );
 
-INSERT INTO users (id,password)VALUES ("71117233","123456");
+INSERT INTO users (id,password)VALUES ("12016423","123456");
 UPDATE users SET id = "123456" WHERE id = "71117233";
 INSERT INTO admin (id,password)VALUES ("71117233","123456");

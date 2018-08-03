@@ -1,7 +1,11 @@
 package qe.service;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -11,13 +15,19 @@ import qe.entity.Admin;
 import qe.entity.User;
 import qe.mapper.UserMapper;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class UserServiceImp implements UserService {
 
     private static Log log = LogFactory.getLog(UserService.class);
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public boolean checkForLogin(User user) {
@@ -67,5 +77,20 @@ public class UserServiceImp implements UserService {
     public boolean saveGrade(String username, int grade) {
         int result = userMapper.updateGrade(username,grade);
         return result!=0;
+    }
+
+    @Override
+    public boolean hasExamed(String username) {
+        return userMapper.getGradeByUsername(username)!=-1;
+    }
+
+    @Override
+    public int getGrade(String username) {
+        return userMapper.getGradeByUsername(username);
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userMapper.getAllUserInfo();
     }
 }

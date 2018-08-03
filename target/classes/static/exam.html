@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>校史竞赛系统</title>
+    <link rel="icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="pic/pic_logo_seu.ico" type="image/x-icon">
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        var code;
+        var paperID;
+        var question;
+        var choice;
+        var currentID = 0;
+        var answer = new Array();
+        var isDone = new Array();
+        var topNumber = 30;
+        for (var i = 0; i < topNumber; i++) {
+            answer[i] = -1;
+        }
+        var min = 30, sed = 0;
+        
+        $(document).ready(function () {
+            document.getElementById("time").innerHTML = 30 + " : 00";
+            $("button#prev").hide();
+            document.getElementById("0").style.backgroundColor = "black";
+            choiceHighlight();
+            $.getJSON("/exam/get_paper", "", function (data) {
+                code = data.code;
+                paperID = data.paperID;
+                question = new Array();
+                choice = new Array();
+                // console.log("Code:" + code + "\n" + "paperID:" + paperID);
+                $.each(data.questions, function (i, item) {
+                    question[i] = item.question;
+                    // console.log("question[" + i + "]=" + question[i]);
+                    choice[i] = item.choices;
+                    // console.log("choice[" + i + "]=" + choice[i]);
+                });
+                $("p#on_show_question").html(question[currentID]);
+                if (choice[currentID] == null) {
+                    $("#on_show_choiceA").html("[✖]错误");
+                    $("#on_show_choiceB").html("[✔]正确");
+                    $("#on_show_choiceC").html("");
+                    $("#on_show_choiceD").html("");
+                }
+                else {
+                    $("#on_show_choiceA").html("A: " + choice[currentID][0]);
+                    $("#on_show_choiceB").html("B: " + choice[currentID][1]);
+                    $("#on_show_choiceC").html("C: " + choice[currentID][2]);
+                    $("#on_show_choiceD").html("D: " + choice[currentID][3]);
+                }
+                $("#veil").hide();
+            });
+
+            setInterval(function () { myTime() }, 1000);
+
+            $("#on_show_choiceA").click(function () {
+                answer[currentID] = 0;
+                choiceHighlight();
+            });
+            $("#on_show_choiceB").click(function () {
+                answer[currentID] = 1;
+                choiceHighlight();
+            });
+            $("#on_show_choiceC").click(function () {
+                answer[currentID] = 2;
+                choiceHighlight();
+            });
+            $("#on_show_choiceD").click(function () {
+                answer[currentID] = 3;
+                choiceHighlight();
+            });
+            $("#prev").click(function () {
+                currentID = prevQuestion();
+            });
+            $("#next").click(function () {
+                nextQuestion();
+            });
+            $("#submit").click(function(){
+                for(var i=0;i<topNumber;i++)
+                {
+                    if(answer[i]==-1){
+                        alert("第"+(i+1)+"题尚未完成，请完成全部题目后再提交");
+                        return;
+                    }
+                }
+                $("#veil").text("提交试卷中");
+                $("#veil").slideDown();
+                var string="{";
+                string=string+"\"paperID\":"+paperID+",";
+                string=string+"\"answers\":[";
+                for (var i=0;i<topNumber-1;i++){
+                    string=string+"\""+answer[i]+"\","
+                }
+                string=string+"\""+answer[topNumber-1]+"\"]}";
+                console.log(string);
+                // var postAns=new XMLHttpRequest();
+                // postAns.open("POST","/exam/getgrade","ture");
+                // postAns.send(string);
+                $.ajax({
+                    type:"POST",
+                    url:"/exam/getgrade",
+                    data:string,
+                    async: false,
+                    contentType:"application/json;charset=UTF-8",
+                    dataType:"json",
+                    complete:function (msg) {
+                        alert("提交成功，进入分数界面");
+                        window.location.href = "/exam/check_grade"
+                    }
+                });
+            });
+           $("td").hover(
+            function () {
+                if (currentID != $(this).attr("id")) {
+                    $(this).css("background-color", "#black");
+                }
+            },
+            function () {
+                if (currentID == $(this).attr("id")) {
+                    $(this).css("background-color", "black");
+                }
+                else {
+                    switch (answer[$(this).attr("id")]) {
+                        case -1: $(this).css("background-color", "#FF4500");
+                            break;
+                        case 0: $(this).css("background-color", "#66327C");
+                            break;
+                        case 1: $(this).css("background-color", "#4A225D");
+                            break;
+                        case 2: $(this).css("background-color", "#3C2F41");
+                            break;
+                        case 3: $(this).css("background-color", "#77428D");
+                            break;
+                    }
+                }
+            });
+             $('td').click(function () {
+                var td_id = $(this).attr("id");
+                jumpToQuestion(td_id);
+            });
+        function myTime() {
+                if (sed == 0) {
+                    min -= 1;
+                    sed = 59;
+                }
+                else
+                    sed -= 1;
+                if (min < 5)
+                    $("#time").css("color", "red");
+                if (sed < 10)
+                    document.getElementById("time").innerHTML = "\t" + min + " : 0" + sed;
+                else
+                    document.getElementById("time").innerHTML = "\t" + min + " : " + sed;
+            }
+        function prevQuestion() {
+            if (currentID == 1) {
+                $("#prev").fadeOut();
+            }
+            else if (currentID == topNumber - 1) {
+                $("#next").fadeIn();
+            }
+            else if (currentID == 0) {
+                return currentID;
+            }
+            currentID = currentID - 1;
+            $("span").hide();
+            document.getElementById(currentID).style.backgroundColor = "black";
+            if (answer[currentID + 1] == -1) {
+                document.getElementById(currentID + 1).style.backgroundColor = "#FF4500";
+            }
+            else
+                switch (answer[currentID + 1]) {
+                    case 0: document.getElementById(currentID + 1).style.backgroundColor = "#66327C";
+                        break;
+                    case 1: document.getElementById(currentID + 1).style.backgroundColor = "#4A225D";
+                        break;
+                    case 2: document.getElementById(currentID + 1).style.backgroundColor = "#3C2F41";
+                        break;
+                    case 3: document.getElementById(currentID + 1).style.backgroundColor = "#77428D";
+                        break;
+                }
+            $("p#on_show_question").html(question[currentID]);
+            if (choice[currentID] == null) {
+                $("#on_show_choiceA").html("[✖]错误");
+                $("#on_show_choiceA").fadeIn();
+                $("#on_show_choiceB").html("[✔]正确");
+                $("#on_show_choiceB").fadeIn();
+                $("#on_show_choiceC").html("");
+                $("#on_show_choiceD").html("");
+            }
+            else {
+                $("#on_show_choiceA").html("A: " + choice[currentID][0]);
+                $("#on_show_choiceA").fadeIn();
+                $("#on_show_choiceB").html("B: " + choice[currentID][1]);
+                $("#on_show_choiceB").fadeIn();
+                $("#on_show_choiceC").html("C: " + choice[currentID][2]);
+                $("#on_show_choiceC").fadeIn();
+                $("#on_show_choiceD").html("D: " + choice[currentID][3]);
+                $("#on_show_choiceD").fadeIn();
+            }
+            choiceHighlight();
+            return currentID;
+        }
+        function nextQuestion() {
+            if (currentID == topNumber - 2) {
+                $("#next").fadeOut();
+            }
+            else if (currentID == 0) {
+                $("#prev").fadeIn();
+            }
+            else if (currentID == topNumber - 1) {
+                return currentID;
+            }
+            currentID = currentID + 1;
+            $("span").hide();
+            document.getElementById(currentID).style.backgroundColor = "black";
+            if (answer[currentID - 1] == -1) {
+                document.getElementById(currentID - 1).style.backgroundColor = "#FF4500";
+            }
+            else
+                switch (answer[currentID - 1]) {
+                    case 0: document.getElementById(currentID - 1).style.backgroundColor = "#66327C";
+                        break;
+                    case 1: document.getElementById(currentID - 1).style.backgroundColor = "#4A225D";
+                        break;
+                    case 2: document.getElementById(currentID - 1).style.backgroundColor = "#3C2F41";
+                        break;
+                    case 3: document.getElementById(currentID - 1).style.backgroundColor = "#77428D";
+                        break;
+                }
+            $("p#on_show_question").html(question[currentID]);
+            if (choice[currentID] == null) {
+                $("#on_show_choiceA").html("[✖]错误");
+                $("#on_show_choiceA").fadeIn();
+                $("#on_show_choiceB").html("[✔]正确");
+                $("#on_show_choiceB").fadeIn();
+                $("#on_show_choiceC").html("");
+                $("#on_show_choiceD").html("");
+            }
+            else {
+                $("#on_show_choiceA").html("A: " + choice[currentID][0]);
+                $("#on_show_choiceA").fadeIn();
+                $("#on_show_choiceB").html("B: " + choice[currentID][1]);
+                $("#on_show_choiceB").fadeIn();
+                $("#on_show_choiceC").html("C: " + choice[currentID][2]);
+                $("#on_show_choiceC").fadeIn();
+                $("#on_show_choiceD").html("D: " + choice[currentID][3]);
+                $("#on_show_choiceD").fadeIn();
+            }
+            choiceHighlight();
+            return currentID;
+        }
+        function choiceHighlight() {
+            $("span").removeClass("spanSelect");
+            $("span").addClass("spanNormal");
+            switch (answer[currentID]) {
+                case -1: break;
+                case 0:
+                    $("#on_show_choiceA").removeClass("spanNormal");
+                    $("#on_show_choiceA").addClass("spanSelect");
+                    break;
+                case 1:
+                    $("#on_show_choiceB").removeClass("spanNormal");
+                    $("#on_show_choiceB").addClass("spanSelect");
+                    break;
+                case 2:
+                    $("#on_show_choiceC").removeClass("spanNormal");
+                    $("#on_show_choiceC").addClass("spanSelect");
+                    break;
+                case 3:
+                    $("#on_show_choiceD").removeClass("spanNormal");
+                    $("#on_show_choiceD").addClass("spanSelect");
+                    break;
+            }
+        }
+        function jumpToQuestion(elemt_id) {
+            $("span").hide();
+            if (answer[currentID] == -1) {
+                document.getElementById(currentID).style.backgroundColor = "#FF4500";
+            }
+            else {
+                switch (answer[currentID]) {
+                    case 0: document.getElementById(currentID).style.backgroundColor = "#66327C";
+                        break;
+                    case 1: document.getElementById(currentID).style.backgroundColor = "#4A225D";
+                        break;
+                    case 2: document.getElementById(currentID).style.backgroundColor = "#3C2F41";
+                        break;
+                    case 3: document.getElementById(currentID).style.backgroundColor = "#77428D";
+                        break;
+                }
+            }
+            currentID = Number(elemt_id);
+            if (currentID > 0) {
+                $("#prev").fadeIn();
+            }
+            if (currentID == 0) {
+                $("#prev").fadeOut();
+            }
+            if (currentID == 29) {
+                $("#next").fadeOut();
+            }
+            if (currentID < 29) {
+                $("#next").fadeIn();
+            }
+            choiceHighlight();
+            document.getElementById(currentID).style.backgroundColor = "black";
+            $("p#on_show_question").html(question[currentID]);
+            if (choice[currentID] == null) {
+                $("#on_show_choiceA").html("[✖]错误");
+                $("#on_show_choiceA").fadeIn();
+                $("#on_show_choiceB").html("[✔]正确");
+                $("#on_show_choiceB").fadeIn();
+                $("#on_show_choiceC").html("");
+                $("#on_show_choiceD").html("");
+            }
+            else {
+                $("#on_show_choiceA").html("A: " + choice[currentID][0]);
+                $("#on_show_choiceA").fadeIn();
+                $("#on_show_choiceB").html("B: " + choice[currentID][1]);
+                $("#on_show_choiceB").fadeIn();
+                $("#on_show_choiceC").html("C: " + choice[currentID][2]);
+                $("#on_show_choiceC").fadeIn();
+                $("#on_show_choiceD").html("D: " + choice[currentID][3]);
+                $("#on_show_choiceD").fadeIn();
+            }
+        }
+        })
+    </script>
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+            box-shadow: 20px;
+        }
+        body {
+            background-color: rgb(110, 110, 110);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-width: 1000px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            cursor: url("cur/curNormal.ico"), auto;
+        }
+        .top {
+            height: 100px;
+            background-repeat: no-repeat;
+            background-image: url(pic/logo.png);
+            background-size: 100px 100px;
+            background-position: left top;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            padding-top: 20px;
+        }
+        #time {
+            margin-left: 20px;
+            color: white;
+        }
+        .top button {
+            position: bottom;
+            float: right;
+            margin-right: 45px;
+            padding: 15px 25px;
+        }
+        .middle {
+            min-height: 450px;
+            width: 100%;
+            position: absolute;
+            top: 100px;
+            bottom: 90px;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .mid_left {
+            min-width: 500px;
+            float: left;
+            margin: auto;
+            height: 100%;
+            width: 75%;
+            background-image: url(pic/bg_01.jpg);
+            background-size: 100% 100%;
+            align-content: center;
+        }
+        #prev {
+            font-size: 2em;
+            text-align: center;
+            width: 60px;
+            height: 60px;
+            position: relative;
+            float: left;
+            left: 10%;
+            top: 40%;
+        }
+        #next {
+            font-size: 2em;
+            text-align: center;
+            width: 60px;
+            height: 60px;
+            position: relative;
+            float: right;
+            right: 10%;
+            top: 40%;
+        }
+        .spanSelect {
+            clear: both;
+            color: #8F77B5;
+            text-shadow: #8F77B5 3px 3px 15px;
+            box-shadow: #8F77B5 5px 5px 20px;
+            border-radius: 20px;
+            padding: 5px;
+            cursor: url("cur/curSelect.ico"), auto;
+            margin: 10px;
+            font-size: 18px;
+            display: block;
+            border: solid;
+            float: left;
+        }
+        .spanNormal {
+            clear: both;
+            color: #268785;
+            text-shadow: #268785 3px 3px 15px;
+            box-shadow: #268785 5px 5px 20px;
+            border-radius: 20px;
+            padding: 5px;
+            cursor: url("cur/curSelect.ico"), auto;
+            margin: 10px;
+            font-size: 18px;
+            display: block;
+            border: dotted;
+            float: left;
+        }
+        #on_show_question {
+            clear: both;
+            color: #8F77B5;
+            text-shadow: #268785 3px 3px 15px;
+            border-radius: 20px;
+            padding: 5px;
+            cursor: url("cur/curNormal.ico"), auto;
+            margin: 10px;
+            font-size: 18px;
+            display: block;
+            border: none;
+            float: left;
+        }
+        #question {
+            box-shadow: #ffffff 0px 15px 30px;
+        }
+        .mid_left #question {
+            margin-left: 20%;
+            margin-right: 20%;
+            margin-top: 0;
+            margin-bottom: 0;
+            height: 100%;
+            min-height: 450px;
+            width: 60%;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding-top: 20px;
+            padding-left: 40px;
+        }
+        .mid_right {
+            float: right;
+            height: max-content;
+            width: 20%;
+        }
+        .mid_right table {
+            height: 100%;
+        }
+        th,
+        td {
+            background-color: #FF4500;
+            border-radius: 5px;
+            box-shadow: 5px 5px 2px #888888;
+            text-align: center;
+            padding: 10px;
+            color: white;
+            margin: 10px solid white;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+        .bottom {
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            height: 90px;
+            background-color: #282828;
+            color: white;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+        button {
+            text-align: center;
+            background-color: rgba(28, 28, 28, 0.5);
+            /*#00000070*/
+            ;
+            border-bottom-style: dashed;
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: url("cur/curSelect.ico"), auto;
+        }
+        #veil{
+            position: absolute;
+            z-index: 100;
+            background-color: rgba(255,255,255,0.8);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            font-size: 2em;
+            text-align: center;
+            color: #6a8372;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="veil">
+        <p style="margin-top: 300px;">正在加载试卷中......
+        </p>
+    </div>
+    <div class="top">
+        <a href="index.html">
+            <button type="button">返回主页</button>
+        </a>
+        <button id="submit" type="submit">提交试卷</button>
+        <!--  倒计时 -->
+        剩余时间
+        <b id="time"></b>
+    </div>
+    <div class="middle">
+        <div class="mid_left">
+            <button id="prev">◁</button>
+            <button id="next">▷</button>
+            <div class="btn">
+                <a href="javascript:void(0)" id="btn_igl" class="sc_lightdis" title="上一页">
+
+                    <div id="tblPrev" class="tblPrev"></div>
+
+                </a>
+            </div>
+            <div id="question">
+                <p id="on_show_question">试卷正在加载...</p>
+                <form id="forma">
+                    <!-- <input type="radio" name="options" value="option1"> -->
+                    <span id="on_show_choiceA"></span>
+                    <br>
+                    <!-- <input type="radio" name="options" value="option2"> -->
+                    <span id="on_show_choiceB"></span>
+                    <br>
+                    <!-- <input type="radio" name="options" value="option3"> -->
+                    <span id="on_show_choiceC"></span>
+                    <br>
+                    <!-- <input type="radio" name="options" value="option4"> -->
+                    <span id="on_show_choiceD"></span>
+                </form>
+            </div>
+            <div class="btn">
+                <a href="javascript:void(0)" id="btn_igl" class="sc_lightdis" title="下一页">
+
+                    <div id="tblNext" class="tblNext"></div>
+
+                </a>
+            </div>
+        </div>
+        <div class="mid_right">
+            <p>答题记录：</p>
+            <p>选择题</p>
+            <table id="table">
+                <tr>
+                    <td id=0>1</td>
+                    <td id=1>2</td>
+                    <td id=2>3</td>
+                    <td id=3>4</td>
+                    <td id=4>5</td>
+                            
+                </tr>
+                <tr>
+                    <td id=5>6</td>
+                    <td id=6>7</td>
+                    <td id=7>8</td>
+                    <td id=8>9</td>
+                    <td id=9>10</td>
+                </tr>
+                <tr>
+                    <td id=10>11</td>
+                    <td id=11>12</td>
+                    <td id=12>13</td>
+                    <td id=13>14</td>
+                    <td id=14>15</td>
+                </tr>
+                <tr>
+                    <td id=15>16</td>
+                    <td id=16>17</td>
+                    <td id=17>18</td>
+                    <td id=18>19</td>
+                    <td id=19>20</td>
+                </tr>
+            </table>
+            <p>判断题</p>
+            <table>
+                <tr>
+                    <td id=20>21</td>
+                    <td id=21>22</td>
+                    <td id=22>23</td>
+                    <td id=23>24</td>
+                    <td id=24>25</td>
+                </tr>
+                <tr>
+                    <td id=25>26</td>
+                    <td id=26>27</td>
+                    <td id=27>28</td>
+                    <td id=28>29</td>
+                    <td id=29>30</td>
+                </tr>
+            </table>
+            </table>
+        </div>
+    </div>
+    <div class="bottom">
+        <p>请检查确认后提交</p>
+    </div>
+</body>
+</html>
